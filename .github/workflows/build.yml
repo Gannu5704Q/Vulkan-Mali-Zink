@@ -1,4 +1,4 @@
-name: Build Renderer APK
+name: Package Renderer APK
 
 on: [push, workflow_dispatch]
 
@@ -8,20 +8,30 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up JDK 17
-        uses: actions/setup-java@v4
-        with:
-          java-version: '17'
-          distribution: 'temurin'
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v3
 
-      - name: Build APK with Gradle
+      - name: Package Native Shared Library into APK
         run: |
-          chmod +x gradlew || true
-          gradle assembleRelease || gradle build
+          mkdir -p apk_root/lib/arm64-v8a
+          cp app/src/main/jniLibs/arm64-v8a/libvulkan_mali_zink.so apk_root/lib/arm64-v8a/
+          cp app/src/main/AndroidManifest.xml apk_root/
+          
+          # Build signed APK using Zip & Apksigner directly
+          cd apk_root
+          zip -r ../Vulkan_Mali_Zink_Cloud.apk .
+          cd ..
+          
+          # Align and sign APK
+          $ANDROID_HOME/build-tools/34.0.0/zipalign -v 4 Vulkan_Mali_Zink_Cloud.apk Vulkan_Mali_Zink_Aligned.apk
+          
+          # Generate keystore and sign
+          keytool -genkey -v -keystore release.jks -alias key0 -keyalg RSA -keysize 2048 -validity 10000 -storepass 123456 -keypass 123456 -dname "CN=VulkanMaliZink"
+          $ANDROID_HOME/build-tools/34.0.0/apksigner sign --ks release.jks --ks-pass pass:123456 --out Vulkan_Mali_Zink_Signed.apk Vulkan_Mali_Zink_Aligned.apk
 
-      - name: Upload Built APK
+      - name: Upload Finished APK
         uses: actions/upload-artifact@v4
         with:
           name: Vulkan_Mali_Zink_APK
-          path: '**/build/outputs/apk/**/*.apk'
+          path: Vulkan_Mali_Zink_Signed.apk
           
