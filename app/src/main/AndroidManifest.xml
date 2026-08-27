@@ -1,56 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.vulkan.mali.zink">
+    package="com.gannu5704q.vulkanmalizink"
+    android:versionCode="1"
+    android:versionName="1.0">
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:extractNativeLibs="true"
+        android:icon="@drawable/img_app"
         android:label="Vulkan Mali Zink"
-        android:hasCode="true">
+        android:supportsRtl="true">
 
-        <!-- PojavLauncher Standard -->
-        <meta-data
-            android:name="net.kdt.pojavlaunch.RENDERER_NAME"
-            android:value="Vulkan Mali Zink" />
-        <meta-data
-            android:name="net.kdt.pojavlaunch.RENDERER_LIBRARY_NAME"
-            android:value="vulkan_mali_zink" />
-        <meta-data
-            android:name="net.kdt.pojavlaunch.RENDERER_TYPE"
-            android:value="vulkan" />
-
-        <!-- FCL (Fold Craft Launcher) Standard -->
-        <meta-data
-            android:name="com.tung.fcl.RENDERER_NAME"
-            android:value="Vulkan Mali Zink" />
-        <meta-data
-            android:name="com.tung.fcl.RENDERER_LIBRARY_NAME"
-            android:value="vulkan_mali_zink" />
-
-        <!-- Glowworm / Zalith / Hyper / Amethyst Standard -->
-        <meta-data
-            android:name="pojav.renderer.name"
-            android:value="Vulkan Mali Zink" />
-        <meta-data
-            android:name="pojav.renderer.library"
-            android:value="vulkan_mali_zink" />
-        <meta-data
-            android:name="custom.renderer.name"
-            android:value="Vulkan Mali Zink" />
-        <meta-data
-            android:name="custom.renderer.library"
-            android:value="vulkan_mali_zink" />
-
-        <!-- Plugin Discovery Intent Filter -->
-        <receiver
-            android:name="com.dummy.Dummy"
+        <activity
+            android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
-                <action android:name="net.kdt.pojavlaunch.ACTION_RENDERER_PLUGIN" />
-                <action android:name="com.tung.fcl.ACTION_RENDERER_PLUGIN" />
-                <action android:name="org.pojav.ACTION_RENDERER_PLUGIN" />
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </receiver>
+        </activity>
+
+        <!-- FCL Detection Metadata -->
+        <meta-data
+            android:name="fclPlugin"
+            android:value="true" />
+        <meta-data
+            android:name="des"
+            android:value="Vulkan Mali Zink by Gannu5704Q" />
+        <meta-data
+            android:name="renderer"
+            android:value="vulkan_mali_zink" />
+        <meta-data
+            android:name="boatEnv"
+            android:value="" />
+        <meta-data
+            android:name="pojavEnv"
+            android:value="MESA_LOADER_DRIVER_OVERRIDE=zink" />
+        <meta-data
+            android:name="minMCVer"
+            android:value="*" />
+        <meta-data
+            android:name="maxMCVer"
+            android:value="*" />
 
     </application>
+
 </manifest>
+
