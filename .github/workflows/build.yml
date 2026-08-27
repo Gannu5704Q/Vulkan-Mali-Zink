@@ -17,15 +17,12 @@ jobs:
           cp app/src/main/jniLibs/arm64-v8a/libvulkan_mali_zink.so apk_root/lib/arm64-v8a/
           cp app/src/main/AndroidManifest.xml apk_root/
           
-          # Build signed APK using Zip & Apksigner directly
           cd apk_root
           zip -r ../Vulkan_Mali_Zink_Cloud.apk .
           cd ..
           
-          # Align and sign APK
           $ANDROID_HOME/build-tools/34.0.0/zipalign -v 4 Vulkan_Mali_Zink_Cloud.apk Vulkan_Mali_Zink_Aligned.apk
           
-          # Generate keystore and sign
           keytool -genkey -v -keystore release.jks -alias key0 -keyalg RSA -keysize 2048 -validity 10000 -storepass 123456 -keypass 123456 -dname "CN=VulkanMaliZink"
           $ANDROID_HOME/build-tools/34.0.0/apksigner sign --ks release.jks --ks-pass pass:123456 --out Vulkan_Mali_Zink_Signed.apk Vulkan_Mali_Zink_Aligned.apk
 
