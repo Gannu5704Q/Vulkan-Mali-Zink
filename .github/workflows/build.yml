@@ -1,4 +1,4 @@
-name: Package Renderer APK
+name: Build Installable Renderer APK
 
 on: [push, workflow_dispatch]
 
@@ -9,27 +9,34 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Build Unaligned APK
-        run: |
-          mkdir -p build_apk/lib/arm64-v8a
-          cp app/src/main/jniLibs/arm64-v8a/libvulkan_mali_zink.so build_apk/lib/arm64-v8a/
-          cp app/src/main/AndroidManifest.xml build_apk/
-          
-          cd build_apk
-          jar cf ../unsigned.apk .
-          cd ..
-
-      - name: Setup Android SDK Tools
+      - name: Setup Android SDK
         uses: android-actions/setup-android@v3
 
-      - name: Sign APK
+      - name: Compile Binary Manifest and Build APK
         run: |
-          keytool -genkey -v -keystore debug.keystore -alias androiddebugkey -storepass android -keypass android -keyalg RSA -keysize 2048 -validity 10000 -dname "CN=Android Debug,O=Android,C=US"
-          $ANDROID_HOME/build-tools/34.0.0/apksigner sign --ks debug.keystore --ks-pass pass:android --key-pass pass:android --min-sdk-version 24 --out Vulkan_Mali_Zink.apk unsigned.apk
+          # 1. Compile resource directory / manifest with AAPT2
+          $ANDROID_HOME/build-tools/34.0.0/aapt2 link -o compiled_base.apk \
+            --manifest app/src/main/AndroidManifest.xml \
+            -I $ANDROID_HOME/platforms/android-34/android.jar \
+            --min-sdk-version 24 \
+            --target-sdk-version 34 \
+            --allow-reserved-package-id
 
-      - name: Upload APK Artifact
+          # 2. Inject native shared library into compiled APK
+          mkdir -p lib/arm64-v8a
+          cp app/src/main/jniLibs/arm64-v8a/libvulkan_mali_zink.so lib/arm64-v8a/
+          zip -u compiled_base.apk lib/arm64-v8a/libvulkan_mali_zink.so
+
+          # 3. ZipAlign APK
+          $ANDROID_HOME/build-tools/34.0.0/zipalign -v 4 compiled_base.apk aligned.apk
+
+          # 4. Generate Key & Sign APK
+          keytool -genkey -v -keystore debug.keystore -alias androiddebugkey -storepass android -keypass android -keyalg RSA -keysize 2048 -validity 10000 -dname "CN=Android Debug,O=Android,C=US"
+          $ANDROID_HOME/build-tools/34.0.0/apksigner sign --ks debug.keystore --ks-pass pass:android --key-pass pass:android --out Vulkan_Mali_Zink_Installable.apk aligned.apk
+
+      - name: Upload Installable APK Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: Vulkan_Mali_Zink_APK
-          path: Vulkan_Mali_Zink.apk
+          name: Vulkan_Mali_Zink_Installable_APK
+          path: Vulkan_Mali_Zink_Installable.apk
           
