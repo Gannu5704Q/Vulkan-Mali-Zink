@@ -1,13 +1,57 @@
+
+<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.vulkan.mali.zink">
 
-    <application 
-        android:label="Vulkan Mali Zink" 
+    <application
+        android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
+        android:label="Vulkan Mali Zink"
         android:hasCode="true">
 
-        <meta-data android:name="org.fcl.renderer.name" android:value="Vulkan Mali Zink" />
-        <meta-data android:name="org.fcl.renderer.library" android:value="vulkan_mali_zink" />
-        <meta-data android:name="org.fcl.renderer.version" android:value="1.0.0" />
+        <!-- PojavLauncher Standard -->
+        <meta-data
+            android:name="net.kdt.pojavlaunch.RENDERER_NAME"
+            android:value="Vulkan Mali Zink" />
+        <meta-data
+            android:name="net.kdt.pojavlaunch.RENDERER_LIBRARY_NAME"
+            android:value="vulkan_mali_zink" />
+        <meta-data
+            android:name="net.kdt.pojavlaunch.RENDERER_TYPE"
+            android:value="vulkan" />
+
+        <!-- FCL (Fold Craft Launcher) Standard -->
+        <meta-data
+            android:name="com.tung.fcl.RENDERER_NAME"
+            android:value="Vulkan Mali Zink" />
+        <meta-data
+            android:name="com.tung.fcl.RENDERER_LIBRARY_NAME"
+            android:value="vulkan_mali_zink" />
+
+        <!-- Glowworm / Zalith / Hyper / Amethyst Standard -->
+        <meta-data
+            android:name="pojav.renderer.name"
+            android:value="Vulkan Mali Zink" />
+        <meta-data
+            android:name="pojav.renderer.library"
+            android:value="vulkan_mali_zink" />
+        <meta-data
+            android:name="custom.renderer.name"
+            android:value="Vulkan Mali Zink" />
+        <meta-data
+            android:name="custom.renderer.library"
+            android:value="vulkan_mali_zink" />
+
+        <!-- Plugin Discovery Intent Filter -->
+        <receiver
+            android:name="com.dummy.Dummy"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="net.kdt.pojavlaunch.ACTION_RENDERER_PLUGIN" />
+                <action android:name="com.tung.fcl.ACTION_RENDERER_PLUGIN" />
+                <action android:name="org.pojav.ACTION_RENDERER_PLUGIN" />
+            </intent-filter>
+        </receiver>
+
     </application>
 </manifest>
