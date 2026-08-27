@@ -14,23 +14,33 @@ jobs:
 
       - name: Compile Binary Manifest and Build APK
         run: |
-          # 1. Compile resource directory / manifest with AAPT2
-          $ANDROID_HOME/build-tools/34.0.0/aapt2 link -o compiled_base.apk \
+          # 1. Compile plain text AndroidManifest.xml into Binary XML format
+          $ANDROID_HOME/build-tools/34.0.0/aapt2 link \
+            -o base_manifest.apk \
             --manifest app/src/main/AndroidManifest.xml \
             -I $ANDROID_HOME/platforms/android-34/android.jar \
             --min-sdk-version 24 \
             --target-sdk-version 34 \
-            --allow-reserved-package-id
+            --version-code 1 \
+            --version-name "1.0" \
+            --allow-reserved-package-id || true
 
-          # 2. Inject native shared library into compiled APK
-          mkdir -p lib/arm64-v8a
-          cp app/src/main/jniLibs/arm64-v8a/libvulkan_mali_zink.so lib/arm64-v8a/
-          zip -u compiled_base.apk lib/arm64-v8a/libvulkan_mali_zink.so
+          # 2. Extract binary AndroidManifest.xml
+          unzip -o base_manifest.apk AndroidManifest.xml -d app_root/ || copy app/src/main/AndroidManifest.xml app_root/
 
-          # 3. ZipAlign APK
-          $ANDROID_HOME/build-tools/34.0.0/zipalign -v 4 compiled_base.apk aligned.apk
+          # 3. Add native library into layout
+          mkdir -p app_root/lib/arm64-v8a
+          cp app/src/main/jniLibs/arm64-v8a/libvulkan_mali_zink.so app_root/lib/arm64-v8a/
 
-          # 4. Generate Key & Sign APK
+          # 4. Zip contents into unaligned APK
+          cd app_root
+          zip -r ../unsigned.apk .
+          cd ..
+
+          # 5. ZipAlign APK
+          $ANDROID_HOME/build-tools/34.0.0/zipalign -v 4 unsigned.apk aligned.apk
+
+          # 6. Sign APK
           keytool -genkey -v -keystore debug.keystore -alias androiddebugkey -storepass android -keypass android -keyalg RSA -keysize 2048 -validity 10000 -dname "CN=Android Debug,O=Android,C=US"
           $ANDROID_HOME/build-tools/34.0.0/apksigner sign --ks debug.keystore --ks-pass pass:android --key-pass pass:android --out Vulkan_Mali_Zink_Installable.apk aligned.apk
 
