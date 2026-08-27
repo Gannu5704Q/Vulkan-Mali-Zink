@@ -19,10 +19,10 @@ jobs:
 
       - name: Compile Resources, Manifest, and Build APK
         run: |
-          # 1. Compile the resources folder (fixes the missing ic_launcher error)
+          # 1. Compile the resources folder
           $ANDROID_HOME/build-tools/34.0.0/aapt2 compile --dir app/src/main/res -o compiled_res.zip
 
-          # 2. Link resources and manifest into a proper base APK
+          # 2. Link resources and manifest into a base APK
           $ANDROID_HOME/build-tools/34.0.0/aapt2 link -o base.apk \
             --manifest app/src/main/AndroidManifest.xml \
             -R compiled_res.zip \
@@ -30,15 +30,20 @@ jobs:
             --min-sdk-version 24 \
             --target-sdk-version 34
 
-          # 3. Inject your native shared library into the compiled APK
+          # 3. Generate a dummy classes.dex to satisfy the Android Package Manager
+          echo 'package com.dummy; public class Dummy {}' > Dummy.java
+          javac Dummy.java
+          $ANDROID_HOME/build-tools/34.0.0/d8 Dummy.class
+
+          # 4. Inject native library and dummy classes.dex into the APK
           mkdir -p lib/arm64-v8a
           cp app/src/main/jniLibs/arm64-v8a/libvulkan_mali_zink.so lib/arm64-v8a/
-          zip -ur base.apk lib/
+          zip -ur base.apk lib/ classes.dex
 
-          # 4. ZipAlign the APK for Android performance standards
-          $ANDROID_HOME/build-tools/34.0.0/zipalign -v 4 base.apk aligned.apk
+          # 5. ZipAlign the APK with page alignment (-p) for native libraries
+          $ANDROID_HOME/build-tools/34.0.0/zipalign -p -v 4 base.apk aligned.apk
 
-          # 5. Generate Key and Sign APK
+          # 6. Generate Key and Sign APK
           keytool -genkey -v -keystore debug.keystore -alias androiddebugkey -storepass android -keypass android -keyalg RSA -keysize 2048 -validity 10000 -dname "CN=Android Debug,O=Android,C=US"
           $ANDROID_HOME/build-tools/34.0.0/apksigner sign --ks debug.keystore --ks-pass pass:android --key-pass pass:android --min-sdk-version 24 --out Vulkan_Mali_Zink_Installable.apk aligned.apk
 
