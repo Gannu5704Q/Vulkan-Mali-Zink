@@ -1,0 +1,13 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.vulkan.mali.zink">
+
+    <application 
+        android:label="Vulkan Mali Zink" 
+        android:icon="@mipmap/ic_launcher"
+        android:hasCode="true">
+
+        <meta-data android:name="org.fcl.renderer.name" android:value="Vulkan Mali Zink" />
+        <meta-data android:name="org.fcl.renderer.library" android:value="vulkan_mali_zink" />
+        <meta-data android:name="org.fcl.renderer.version" android:value="1.0.0" />
+    </application>
+</manifest>
