@@ -1,7 +1,4 @@
-# Vulkan Mali Zink 
+# Vulkan Mali Zink
 
-
-<span style="color🟢">**Work in Progress**</span>
-
-
-***<span style="color🟣">Stay Turned</span>***
+![Status](https://img.shields.io/badge/Status-Work%20in%20Progress-green)
+![Notice](https://img.shields.io/badge/Notice-Stay%20Tuned-purple)
