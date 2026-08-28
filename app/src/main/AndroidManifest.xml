@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.gannu5704q.vulkanmalizink">
 
-        <application
+    <application
         android:allowBackup="true"
         android:extractNativeLibs="true"
         android:icon="@mipmap/ic_launcher"
@@ -33,4 +33,5 @@
             android:value="MESA_LOADER_DRIVER_OVERRIDE=zink" />
 
     </application>
-    
+
+</manifest>
