@@ -19,19 +19,28 @@
             </intent-filter>
         </activity>
 
-        <!-- Launcher Metadata -->
+        <!-- Complete FCL / Pojav Metadata -->
         <meta-data
             android:name="fclPlugin"
             android:value="true" />
         <meta-data
             android:name="des"
-            android:value="Vulkan Mali Zink Driver" />
+            android:value="Vulkan Mali Zink Driver by Gannu5704Q" />
         <meta-data
             android:name="renderer"
             android:value="vulkan_mali_zink" />
         <meta-data
+            android:name="boatEnv"
+            android:value="MESA_LOADER_DRIVER_OVERRIDE=zink" />
+        <meta-data
             android:name="pojavEnv"
             android:value="MESA_LOADER_DRIVER_OVERRIDE=zink" />
+        <meta-data
+            android:name="minMCVer"
+            android:value="1.7.2" />
+        <meta-data
+            android:name="maxMCVer"
+            android:value="1.21.4" />
 
     </application>
 
