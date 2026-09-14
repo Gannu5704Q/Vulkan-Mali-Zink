@@ -13,4 +13,37 @@ android {
         versionCode 1
         versionName "1.0"
     }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+        }
+        configureEach {
+            // App display name in launcher settings
+            resValue("string", "app_name", "Vulkan Mali Zink")
+            applicationIdSuffix ".vulkanmalizink"
+
+            // Description displayed in FCL
+            manifestPlaceholders["des"] = "Vulkan Mali Zink Driver by Gannu5704Q"
+
+            // MUST follow: Name:RendererLib:EGLLib
+            manifestPlaceholders["renderer"] = "Vulkan Mali Zink:libGL.so:libEGL.so"
+
+            // Environment variables formatted cleanly for parsers
+            manifestPlaceholders["boatEnv"] = "MESA_LOADER_DRIVER_OVERRIDE=zink"
+            manifestPlaceholders["pojavEnv"] = "MESA_LOADER_DRIVER_OVERRIDE=zink"
+
+            // MC version bounds
+            manifestPlaceholders["minMCVer"] = "1.7.2"
+            manifestPlaceholders["maxMCVer"] = "1.21.4"
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+dependencies {
 }
