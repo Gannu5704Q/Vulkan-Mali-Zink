@@ -1,17 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.gannu5704q.vulkanmalizink">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <application
         android:allowBackup="true"
         android:extractNativeLibs="true"
         android:icon="@mipmap/ic_launcher"
-        android:label="Vulkan Mali Zink"
+        android:label="@string/app_name"
         android:supportsRtl="true">
 
         <activity
             android:name=".MainActivity"
-            android:label="Vulkan Mali Zink"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -19,28 +17,27 @@
             </intent-filter>
         </activity>
 
-        <!-- Complete FCL / Pojav Metadata -->
         <meta-data
             android:name="fclPlugin"
             android:value="true" />
         <meta-data
             android:name="des"
-            android:value="Vulkan Mali Zink Driver by Gannu5704Q" />
+            android:value="${des}" />
         <meta-data
             android:name="renderer"
-            android:value="vulkan_mali_zink" />
+            android:value="${renderer}" />
         <meta-data
             android:name="boatEnv"
-            android:value="MESA_LOADER_DRIVER_OVERRIDE=zink" />
+            android:value="${boatEnv}" />
         <meta-data
             android:name="pojavEnv"
-            android:value="MESA_LOADER_DRIVER_OVERRIDE=zink" />
+            android:value="${pojavEnv}" />
         <meta-data
             android:name="minMCVer"
-            android:value="1.7.2" />
+            android:value="${minMCVer}" />
         <meta-data
             android:name="maxMCVer"
-            android:value="1.21.4" />
+            android:value="${maxMCVer}" />
 
     </application>
 
