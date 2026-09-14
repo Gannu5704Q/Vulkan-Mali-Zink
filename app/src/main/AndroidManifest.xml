@@ -19,13 +19,13 @@
             </intent-filter>
         </activity>
 
-        <!-- Launcher Detection Metadata -->
+        <!-- Launcher Metadata -->
         <meta-data
             android:name="fclPlugin"
             android:value="true" />
         <meta-data
             android:name="des"
-            android:value="Vulkan Mali Zink by Gannu5704Q" />
+            android:value="Vulkan Mali Zink Driver" />
         <meta-data
             android:name="renderer"
             android:value="vulkan_mali_zink" />
