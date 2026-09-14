@@ -19,7 +19,7 @@
             </intent-filter>
         </activity>
 
-        <!-- FCL & Pojav Detection Metadata -->
+        <!-- Launcher Detection Metadata -->
         <meta-data
             android:name="fclPlugin"
             android:value="true" />
